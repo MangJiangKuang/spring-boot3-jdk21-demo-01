@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/README.md">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/README.md" />
+              <option name="updatedContent" value="# Shiro权限框架设计示例&#10;&#10;## 设计思路&#10;- 用户（User）拥有角色（Role），角色拥有权限（Permission）。&#10;- 使用Shiro自定义Realm实现认证和授权。&#10;- Controller通过Shiro注解进行权限控制。&#10;&#10;## 运行方式&#10;1. 启动Spring Boot项目。&#10;2. 访问`/admin`和`/user`接口，需登录并拥有相应权限。&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/config/ShiroConfig.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/config/ShiroConfig.java" />
+              <option name="updatedContent" value="package config;&#10;&#10;import org.apache.shiro.mgt.SecurityManager;&#10;import org.apache.shiro.realm.Realm;&#10;import org.apache.shiro.web.mgt.DefaultWebSecurityManager;&#10;import shiro.CustomRealm;&#10;import org.springframework.context.annotation.Bean;&#10;import org.springframework.context.annotation.Configuration;&#10;&#10;@Configuration&#10;public class ShiroConfig {&#10;    @Bean&#10;    public Realm realm() {&#10;        return new CustomRealm();&#10;    }&#10;&#10;    @Bean&#10;    public SecurityManager securityManager(Realm realm) {&#10;        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();&#10;        securityManager.setRealm(realm);&#10;        return securityManager;&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/controller/UserController.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/controller/UserController.java" />
+              <option name="updatedContent" value="package controller;&#10;&#10;import org.apache.shiro.authz.annotation.RequiresPermissions;&#10;import org.springframework.web.bind.annotation.GetMapping;&#10;import org.springframework.web.bind.annotation.RestController;&#10;&#10;@RestController&#10;public class UserController {&#10;    @GetMapping(&quot;/admin&quot;)&#10;    @RequiresPermissions(&quot;admin:manage&quot;)&#10;    public String admin() {&#10;        return &quot;管理员操作&quot;;&#10;    }&#10;&#10;    @GetMapping(&quot;/user&quot;)&#10;    @RequiresPermissions(&quot;user:view&quot;)&#10;    public String user() {&#10;        return &quot;用户查看&quot;;&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/entity/Permission.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/entity/Permission.java" />
+              <option name="updatedContent" value="package entity;&#10;&#10;public class Permission {&#10;    private String permission;&#10;    // ...getter/setter...&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/entity/Role.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/entity/Role.java" />
+              <option name="updatedContent" value="package entity;&#10;&#10;import java.util.Set;&#10;&#10;public class Role {&#10;    private String name;&#10;    private Set&lt;Permission&gt; permissions;&#10;    // ...getter/setter...&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/entity/User.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/entity/User.java" />
+              <option name="updatedContent" value="package entity;&#10;&#10;import java.util.Set;&#10;&#10;public class User {&#10;    private String username;&#10;    private String password;&#10;    private Set&lt;Role&gt; roles;&#10;    // ...getter/setter...&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/shiro/CustomRealm.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/shiro/CustomRealm.java" />
+              <option name="updatedContent" value="package shiro;&#10;&#10;import entity.User;&#10;import entity.Role;&#10;import entity.Permission;&#10;import org.apache.shiro.authc.*;&#10;import org.apache.shiro.authz.*;&#10;import org.apache.shiro.realm.AuthorizingRealm;&#10;import org.apache.shiro.subject.PrincipalCollection;&#10;&#10;public class CustomRealm extends AuthorizingRealm {&#10;    // 模拟数据库&#10;    private Map&lt;String, User&gt; userStore = new HashMap&lt;&gt;();&#10;&#10;    // ...构造方法初始化用户、角色、权限...&#10;&#10;    @Override&#10;    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {&#10;        String username = (String) principals.getPrimaryPrincipal();&#10;        User user = userStore.get(username);&#10;        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();&#10;        for (Role role : user.getRoles()) {&#10;            info.addRole(role.getName());&#10;            for (Permission perm : role.getPermissions()) {&#10;                info.addStringPermission(perm.getPermission());&#10;            }&#10;        }&#10;        return info;&#10;    }&#10;&#10;    @Override&#10;    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {&#10;        String username = (String) token.getPrincipal();&#10;        User user = userStore.get(username);&#10;        if (user == null) throw new UnknownAccountException();&#10;        return new SimpleAuthenticationInfo(username, user.getPassword(), getName());&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

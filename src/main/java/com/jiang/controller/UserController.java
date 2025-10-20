@@ -1,6 +1,5 @@
 package com.jiang.controller;
 
-import com.jiang.entity.Role;
 import com.jiang.entity.User;
 import com.jiang.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,9 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * 用户控制器

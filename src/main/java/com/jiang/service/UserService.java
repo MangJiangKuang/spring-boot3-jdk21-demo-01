@@ -2,9 +2,6 @@ package com.jiang.service;
 
 import com.jiang.entity.User;
 
-import java.util.List;
-import java.util.Map;
-
 public interface UserService {
     //处理登录的方法
     String getUserInfo(User user);

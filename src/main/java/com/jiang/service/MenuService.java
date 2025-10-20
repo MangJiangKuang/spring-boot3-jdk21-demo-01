@@ -1,7 +1,6 @@
 package com.jiang.service;
 
 import com.jiang.entity.Menu;
-import com.jiang.entity.User;
 
 import java.util.List;
 

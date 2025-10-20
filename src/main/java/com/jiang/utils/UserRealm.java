@@ -10,10 +10,12 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
+import java.util.Objects;
+
 public class UserRealm extends AuthorizingRealm {
     @Resource
     private UserRepository userRepository;
-
+    // 声明 passwordEncoder 字段
     // 授权：为已认证用户加载角色与权限
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -36,19 +38,23 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
+        String password = new String(upToken.getPassword());
 
         User user = userRepository.findByUserName(username).orElse(null);
         if (user == null) {
+            System.out.println("用户名: " + username);
             throw new UnknownAccountException("用户不存在");
         }
-
-        //用户验证后需返回用户信息
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
-                user.getUserName(),
-                user.getPassword(),
+        // 密码验证逻辑
+        if (!Objects.equals(MD5Util.encrypt(password+user.getSalt()), user.getPassword())) {
+            throw new IncorrectCredentialsException("密码错误");
+        }
+        // 返回带盐的认证信息，交由 HashedCredentialsMatcher(MD5+salt) 校验
+        return new SimpleAuthenticationInfo(
+                username,
+                password,
                 ByteSource.Util.bytes(user.getSalt()),
                 getName());
-        return info;
     }
 
 

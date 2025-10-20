@@ -1,13 +1,10 @@
 package com.jiang.service.impl;
 
-import com.jiang.entity.Menu;
 import com.jiang.entity.Role;
 import com.jiang.repository.RoleRepository;
 import com.jiang.service.RoleService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 @Service
 public class RoleServiceImpl  implements RoleService {
     @Resource

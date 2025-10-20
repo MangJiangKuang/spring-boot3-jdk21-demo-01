@@ -1,19 +1,19 @@
 package com.jiang.utils;
 
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.DelegatingFilterProxy;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Configuration
 public class ShiroConfig {
@@ -28,8 +28,20 @@ public class ShiroConfig {
 
     @Bean
     public UserRealm userRealm(HashedCredentialsMatcher matcher) {
-        UserRealm realm = new UserRealm();
-        realm.setCredentialsMatcher(matcher);
+        UserRealm realm = new UserRealm(){
+            @Override
+            protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+                    throws AuthenticationException {
+                UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+                // 预检查令牌格式
+                if (upToken.getPassword().length  == 0) {
+                    throw new IllegalArgumentException("令牌格式错误：密码不能为空");
+                }
+                // 继续正常的认证流程
+                return super.doGetAuthenticationInfo(token);
+            }
+        };
+
         return realm;
     }
 

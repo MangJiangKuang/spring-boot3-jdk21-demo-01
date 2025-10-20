@@ -1,7 +1,6 @@
 package com.jiang.service.impl;
 
 import com.jiang.entity.Menu;
-import com.jiang.entity.User;
 import com.jiang.repository.MenuRepository;
 import com.jiang.service.MenuService;
 import jakarta.annotation.Resource;

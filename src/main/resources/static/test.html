@@ -26,8 +26,8 @@
 <h2>Shiro 测试</h2>
 <div>
     <input id="u" placeholder="username" value="admin"/>
-    <input id="p" placeholder="password" type="password" value="123456"/>
-    <button onclick="call('POST','/auth/login',{username: u.value, password: p.value})">登录</button>
+    <input id="p" placeholder="password" type="password" value="admin"/>
+    <button onclick="call('POST','/auth/login',{userName: u.value, password: p.value})">登录</button>
     <button onclick="call('POST','/auth/logout')">登出</button>
 </div>
 

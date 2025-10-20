@@ -8,7 +8,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.lang.util.ByteSource;
+import org.apache.shiro.util.ByteSource;
 
 public class UserRealm extends AuthorizingRealm {
     @Resource
@@ -31,9 +31,28 @@ public class UserRealm extends AuthorizingRealm {
         });
         return info;
     }
-
-    // 认证：用户名 + MD5(salt) 校验
+    // 认证：用户名 +  MD5(salt) 校验
     @Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
+        String username = upToken.getUsername();
+
+        User user = userRepository.findByUserName(username).orElse(null);
+        if (user == null) {
+            throw new UnknownAccountException("用户不存在");
+        }
+
+        //用户验证后需返回用户信息
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
+                user.getUserName(),
+                user.getPassword(),
+                ByteSource.Util.bytes(user.getSalt()),
+                getName());
+        return info;
+    }
+
+
+   /* @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         String username = upToken.getUsername();
@@ -52,5 +71,5 @@ public class UserRealm extends AuthorizingRealm {
                 user.getPassword(),
                 ByteSource.Util.bytes(user.getSalt()),
                 getName());
-    }
+    }*/
 }

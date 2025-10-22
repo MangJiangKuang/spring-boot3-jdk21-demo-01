@@ -28,7 +28,7 @@ public class ShiroConfig {
 
     @Bean
     public UserRealm userRealm(HashedCredentialsMatcher matcher) {
-        UserRealm realm = new UserRealm(){
+        return new UserRealm(){
             @Override
             protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
                     throws AuthenticationException {
@@ -41,8 +41,6 @@ public class ShiroConfig {
                 return super.doGetAuthenticationInfo(token);
             }
         };
-
-        return realm;
     }
 
     // 交由 Shiro Starter 自动装配 SecurityManager
@@ -53,7 +51,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 设置登录页面URL
-        shiroFilterFactoryBean.setLoginUrl("/test.html"); // 或者你自己的登录页面
+        shiroFilterFactoryBean.setLoginUrl("/login.html"); // 或者你自己的登录页面
 
         // 使用 DefaultShiroFilterChainDefinition
         // 使用 DefaultShiroFilterChainDefinition
@@ -61,7 +59,7 @@ public class ShiroConfig {
         chainDefinition.addPathDefinition("/auth/login", "anon");
         chainDefinition.addPathDefinition("/auth/logout", "anon");
         chainDefinition.addPathDefinition("/user/login", "anon");
-        chainDefinition.addPathDefinition("/test.html", "anon"); // 登录页面允许匿名访问
+        chainDefinition.addPathDefinition("/login.html", "anon"); // 登录页面允许匿名访问
         chainDefinition.addPathDefinition("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(chainDefinition.getFilterChainMap());
@@ -107,7 +105,7 @@ public class ShiroConfig {
         def.addPathDefinition("/swagger-ui.html", "anon");
         def.addPathDefinition("/", "anon");
         def.addPathDefinition("/index.html", "anon");
-        def.addPathDefinition("/test.html", "anon");
+        def.addPathDefinition("/login.html", "anon");
         def.addPathDefinition("/webjars/", "anon");
         def.addPathDefinition("/favicon.ico", "anon");
         def.addPathDefinition("/public/", "anon");

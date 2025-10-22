@@ -26,15 +26,25 @@ public class Menu {
     @GeneratedValue(generator = "snowflakeId") // 指定主键生成策略为自定义的雪花算法
     @GenericGenerator(name = "snowflakeId",strategy = "com.jiang.utils.SnowflakeIdGenerator")// 使用自定义的雪花算法生成器
     private long menuId;
+    // 菜单名称
     private String menuName;
+    // 菜单地址
     private String menuUrl;
+    // 图标
     private  String menuIcon;
+    //父级菜单id
     private int parentId;
-    private int orderNum;
+    //菜单级别
+    private int menuLevel;
+    //描述
     private String description;
+    //是否启用
     private boolean enabled;
+    //是否隐藏
     private boolean isHidden;
+    //权限
     private String permission;
+
   //菜单和角色多对多关系
   @ManyToMany(mappedBy = "menus",fetch = FetchType.LAZY)
   @ToString.Exclude

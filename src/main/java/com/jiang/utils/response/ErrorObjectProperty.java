@@ -1,6 +1,5 @@
 package com.jiang.utils.response;
 
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.Data;
 
 @Data

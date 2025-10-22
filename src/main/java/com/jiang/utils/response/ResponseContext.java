@@ -4,14 +4,10 @@ package com.jiang.utils.response;
 import com.jiang.utils.status.ResponseMessage;
 import com.jiang.utils.status.ResponseMessageFactory;
 import lombok.Data;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
-import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import java.sql.SQLException;
+
 import java.util.List;
 
 @Data

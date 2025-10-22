@@ -37,7 +37,7 @@ public class Role {
     @ToString.Exclude // 避免递归调用
     private Set<Menu> menus = new HashSet<>();
     //角色和用户多对多关系
-    @ManyToMany(mappedBy = "roles",fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @ToString.Exclude // 避免递归调用
     private Set<User> users = new HashSet<>();
 

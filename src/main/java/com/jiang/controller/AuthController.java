@@ -4,6 +4,7 @@ import com.jiang.entity.Menu;
 import com.jiang.entity.Role;
 import com.jiang.entity.User;
 import com.jiang.service.UserService;
+import com.jiang.utils.response.ResponseContext;
 import jakarta.annotation.Resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -47,14 +48,14 @@ public class AuthController {
     }
     //获取菜单
     @PostMapping("/getMenu")
-    public String getMenu() {
+    public ResponseContext< Map<Role, Set<Menu>>> getMenu() {
         Subject subject = SecurityUtils.getSubject();
         String username = subject.getPrincipal().toString();
         User user = userService.getUserByUserName(username);
-        // 方法1：检查具体权限
+        /*// 方法1：检查具体权限
         if (subject.isPermitted("menu:view")) {
-            return "OK 获取菜单成功";
-        }
+            return ;
+        }*/
 
 
         Map<Role, Set<Menu>> roleMenus = new java.util.HashMap<>(Map.of());
@@ -62,7 +63,7 @@ public class AuthController {
             //角色名与菜单对应
             roleMenus.put(role,role.getMenus());
         });
-        return "OK 权限列表:" +roleMenus;
+        return ResponseContext.success(roleMenus);
     }
     @PostMapping("/logout")
     public String logout() {

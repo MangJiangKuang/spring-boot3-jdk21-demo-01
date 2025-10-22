@@ -45,10 +45,11 @@ public class Menu {
     //权限
     private String permission;
 
-  //菜单和角色多对多关系
-  @ManyToMany(mappedBy = "menus",fetch = FetchType.LAZY)
-  @ToString.Exclude
-  private Set<Role> roles = new HashSet<>();
+    //菜单和角色多对多关系
+    //菜单不能在查角色因为是最后一层所以不显示角色信息
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @ToString.Exclude
+    private Set<Role> roles = new HashSet<>();
 
     @Override
     public final boolean equals(Object o) {
